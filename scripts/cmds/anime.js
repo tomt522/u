@@ -3,6 +3,13 @@ module.exports = {
     name: "anime",
     version: "1.0",
     author: "Ullash ッ ☆𝐀𝐁𝐇𝐑𝐀𝐍𝐈𝐋☆", // এই নামটি পরিবর্তন করলে ত্রুটি আসবে
+    countDown: 5,
+    role: 0,
+    shortDescription: "all video ðŸ“·",
+    longDescription: "",
+    category: "Video",
+    guide: "{pn}"
+  },
   },
 
   sentVideos: [],
