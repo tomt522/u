@@ -1,40 +1,68 @@
 const axios = require('axios');
-const a = 'xyz';
+const FormData = require('form-data');
+const fs = require('fs');
+const path = require('path');
+
+const IMGUR_CLIENT_ID = "5ba5e80cd3433a7";
 
 module.exports = {
   config: {
-    name: 'imgur',
-    aliases: ['imgur'],
+    name: "imgur",
+    version: "1.1",
+    author: "SH4ON",
+    countDown: 1,
     role: 0,
-    author: 'Fahim_Noob',
-    countDown: 5,
-    longDescription: 'Upload images to Imgur.',
-    category: 'image',
+    longDescription: "Upload image to Imgur and get the link",
+    category: "utility",
     guide: {
-      en: '${pn} reply to an image to upload it to Imgur.'
+      en: "${pn} reply to an image"
     }
   },
+
   onStart: async function ({ message, api, event }) {
-    if (!event.messageReply || !event.messageReply.attachments || !event.messageReply.attachments[0]) {
-      return message.reply('Please reply to an image to upload it to Imgur.');
+    // Get the image URL from the replied message
+    const imageUrl = event.messageReply?.attachments[0]?.url;
+
+    if (!imageUrl) {
+      return message.reply('⚠ Please reply to an image to upload it to Imgur.');
     }
 
-    const imgUrl = event.messageReply.attachments[0].url;
-    const imgurUrl = `https://smfahim.${a}/imgur?url=${encodeURIComponent(imgUrl)}`;
+    // React with a waiting emoji
+    api.setMessageReaction("♻️", event.messageID, (err) => {}, true);
 
     try {
-      const response = await axios.get(imgurUrl);
-      const data = response.data;
+      // Download the image to a temporary path
+      const imageResponse = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+      const tempImagePath = path.join(__dirname, 'temp_image.jpg');
+      fs.writeFileSync(tempImagePath, imageResponse.data);
 
-      if (data.uploaded && data.uploaded.status === 'success') {
-        message.reply(`${data.uploaded.image}`);
-      } else {
-        message.reply('❌| Image upload failed.');
-      }
+      // Prepare the image file for upload to Imgur
+      const formData = new FormData();
+      formData.append('image', fs.createReadStream(tempImagePath));
+
+      // Send the request to Imgur
+      const imgurResponse = await axios.post('https://api.imgur.com/3/upload', formData, {
+        headers: {
+          ...formData.getHeaders(),
+          Authorization: `Client-ID ${IMGUR_CLIENT_ID}`
+        }
+      });
+
+      // Get the Imgur URL from the response
+      const imgurLink = imgurResponse.data.data.link;
+
+      // Remove the temporary image file
+      fs.unlinkSync(tempImagePath);
+
+      // Edit the original waiting message with the Imgur link and react with a success emoji
+      api.sendMessage('\n' + imgurLink, event.threadID, async () => {
+        await api.setMessageReaction("❤️‍🩹", event.messageID, (err) => {}, true);
+      });
 
     } catch (error) {
-      message.reply('❌| There was an error uploading your image.');
-      console.error(error);
+      console.error('Imgur upload failed:', error);
+      await message.reply('❌ Oops! Something went wrong while uploading the image.');
+      api.setMessageReaction("❌", event.messageID, (err) => {}, true);
     }
   }
 };
