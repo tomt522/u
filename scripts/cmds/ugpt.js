@@ -2,7 +2,8 @@ const axios = require('axios');
 
 let PriyaPrefix = [
   'shadow',
-  '.ai', // Add Your Prefix Here
+  '.ai',
+  'ullashai',// Add Your Prefix Here
 ];
 
 const axiosInstance = axios.create();
