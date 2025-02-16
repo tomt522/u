@@ -4,7 +4,7 @@ module.exports = {
 	 version: "1.0",
 	 author: "Ullash ッ ☆𝐀𝐁𝐇𝐑𝐀𝐍𝐈𝐋☆",
 	 countDown: 5,
-	 role: 0,
+	 role: 3,
 	 shortDescription: "no prefix",
 	 longDescription: "no prefix",
 	 category: "no prefix",
