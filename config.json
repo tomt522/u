@@ -35,29 +35,20 @@
     "ignoreCommand": []
   },
   "adminBot": [
-    "61567301076941",
-    "100086680386976",
-    "100082395531611",
-    "100000654976375",
-    "100025583375614",
-    "100092421819567",
-    "100057845471745",
-    "61559253790096"
+    "61559427406776",
+    ""
   ],
   "whiteListMode": {
     "enable": false,
     "whiteListIds": [
-      "61567301076941",
-      "100082395531611",
-      "100086680386976",
-      "100000654976375",
-      "100025583375614"
+      "61559427406776",
+      ""
       
     ],
     "notes": "if you enable this feature, only the ids in the whiteListIds section can use the bot"
   },
-  "nickNameBot": "☆𝐀𝐁𝐇𝐑𝐀𝐍𝐈𝐋☆ BOT",
-  "prefix": "/",
+  "nickNameBot": "Yₒᵤᵣ𝐓𝐎𝐌",
+  "prefix": "-",
   "BaYjidnapi": "",
   "api": "",
   "api2": "",
